@@ -46,14 +46,65 @@ class Array
 
     #------my_flatten-----
     def my_flatten 
-        
+        new_arr = []
+        self.my_each do |data|
+            if data.is_a?(Array)
+                new_arr += data.my_flatten
+            else
+                new_arr << data
+            end
+        end
+        new_arr
     end
 
+    #------my_zip-----
+    def my_zip(*args)
+        arr = Array.new(self.length) { Array.new() }
+        (0...arr.length).each do |i|
+            arr[i] << self[i]
+            args.each do |arg|
+                arr[i] << arg[i]
+            end
+        end
+        arr
+    end
 
+    #------my_rotate-----
+    def my_rotate(n = 1)
+        new_arr = self.dup
+        if n > 0
+            while n > 0
+                temp = new_arr.shift
+                new_arr << temp
+                n -= 1
+            end
+        else
+            while n < 0
+                temp = new_arr.pop
+                new_arr.unshift(temp)
+                n += 1
+            end
+        end
+        new_arr
+    end
+
+    #------my_join-----
+    def my_join(s = "")
+        new_str = ""
+        self.my_each { |el| new_str += el + s }
+        new_str
+    end
+
+    #------my_reverse-----
+    def my_reverse
+        new_arr = []
+        i = self.length - 1
+        while i >= 0
+            new_arr << self[i]
+            i -= 1
+        end
+        new_arr
+    end
 end
-
-a = [1, 2, 3]
-p a.my_any? { |num| num > 1 } # => true
-p a.my_any? { |num| num == 4 } # => false
-p a.my_all? { |num| num > 1 } # => false
-p a.my_all? { |num| num < 4 } # => true
+# p [ "a", "b", "c" ].my_reverse   #=> ["c", "b", "a"]
+# p [ 1 ].my_reverse               #=> [1]
